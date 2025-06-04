@@ -1,11 +1,13 @@
-# Core FastAPI dependencies
 fastapi>=0.109.0,<0.110.0
 uvicorn[standard]>=0.27.0,<0.28.0
+jinja2>=3.1.0,<3.2.0
 python-dotenv>=1.0.0,<2.0.0
 pydantic>=2.0.0,<3.0.0
 pydantic-settings>=2.0.0,<3.0.0
-nicegui>=1.4.15,<2.0.0 # For NiceGUI UI framework
-
-# Optional, but often useful
-python-multipart>=0.0.9,<0.0.10 # For file uploads
-Jinja2>=3.1.0,<3.2.0 # For HTML templating (if needed)
+chardet>=5.2.0,<6.0.0
+sqlalchemy>=2.0.25,<3.0.0
+alembic>=1.13.1,<2.0.0
+python-multipart>=0.0.6,<1.0.0
+pillow>=10.1.0,<11.0.0
+passlib[bcrypt]>=1.7.4,<2.0.0
+python-jose[cryptography]>=3.3.0,<4.0.0
