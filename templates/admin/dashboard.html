@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">Admin Dashboard</h1>
+        <a href="/admin/products/add" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add New Product
+        </a>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4>{{ products|length }}</h4>
+                            <p class="mb-0">Total Products</p>
+                        </div>
+                        <i class="fas fa-box fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4>{{ products|selectattr("stock", "gt", 0)|list|length }}</h4>
+                            <p class="mb-0">In Stock</p>
+                        </div>
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4>{{ products|selectattr("stock", "eq", 0)|list|length }}</h4>
+                            <p class="mb-0">Out of Stock</p>
+                        </div>
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4>{{ products|selectattr("featured", "eq", true)|list|length }}</h4>
+                            <p class="mb-0">Featured</p>
+                        </div>
+                        <i class="fas fa-star fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Products Table -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Product Management</h5>
+        </div>
+        <div class="card-body">
+            {% if products %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Featured</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>
+                                <img src="{{ product.image_url or 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop&crop=center' }}" 
+                                     alt="{{ product.name }}" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;">
+                            </td>
+                            <td>
+                                <strong>{{ product.name }}</strong><br>
+                                <small class="text-muted">ID: {{ product.id }}</small>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">{{ product.category }}</span>
+                            </td>
+                            <td class="price-tag">${{ "%.2f"|format(product.price) }}</td>
+                            <td>
+                                {% if product.stock > 0 %}
+                                <span class="badge bg-success">{{ product.stock }}</span>
+                                {% else %}
+                                <span class="badge bg-danger">Out of Stock</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if product.featured %}
+                                <span class="badge bg-warning">Featured</span>
+                                {% else %}
+                                <span class="badge bg-light text-dark">Regular</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="/product/{{ product.id }}" class="btn btn-outline-primary" target="_blank">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <button class="btn btn-outline-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No products found</h5>
+                <p class="text-muted">Start by adding your first ASICS product!</p>
+                <a href="/admin/products/add" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add First Product
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
