@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ page_title or "ASICS Store" }}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --asics-blue: #0066cc;
+            --asics-orange: #ff6600;
+            --asics-dark: #1a1a1a;
+            --asics-light: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: var(--asics-blue) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--asics-blue);
+            border-color: var(--asics-blue);
+        }
+        
+        .btn-primary:hover {
+            background-color: #0052a3;
+            border-color: #0052a3;
+        }
+        
+        .btn-warning {
+            background-color: var(--asics-orange);
+            border-color: var(--asics-orange);
+            color: white;
+        }
+        
+        .text-primary {
+            color: var(--asics-blue) !important;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--asics-blue), var(--asics-orange));
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            height: 250px;
+            object-fit: cover;
+            width: 100%;
+        }
+        
+        .footer {
+            background-color: var(--asics-dark);
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+        
+        .cart-badge {
+            background-color: var(--asics-orange);
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+        }
+        
+        .price-tag {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--asics-orange);
+        }
+        
+        .category-filter {
+            background-color: var(--asics-light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .size-selector {
+            display: inline-block;
+            margin: 0.25rem;
+        }
+        
+        .size-option {
+            border: 2px solid #dee2e6;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .size-option:hover,
+        .size-option.selected {
+            border-color: var(--asics-blue);
+            background-color: var(--asics-blue);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-running"></i> ASICS
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">All Shoes</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/products?category=Running">Running</a></li>
+                            <li><a class="dropdown-item" href="/products?category=Training">Training</a></li>
+                            <li><a class="dropdown-item" href="/products?category=Lifestyle">Lifestyle</a></li>
+                            <li><a class="dropdown-item" href="/products?category=Tennis">Tennis</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <!-- Search -->
+                    <form class="d-flex me-3" action="/products" method="get">
+                        <input class="form-control me-2" type="search" name="search" placeholder="Search shoes..." style="width: 200px;">
+                        <button class="btn btn-outline-primary" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                    
+                    <!-- Cart -->
+                    <a href="/cart" class="btn btn-outline-primary position-relative me-2">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cart-count">0</span>
+                    </a>
+                    
+                    <!-- Admin -->
+                    <a href="/admin" class="btn btn-outline-secondary">
+                        <i class="fas fa-cog"></i> Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-running"></i> ASICS</h5>
+                    <p>Premium athletic footwear for runners, athletes, and active lifestyle enthusiasts.</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/products" class="text-light text-decoration-none">All Products</a></li>
+                        <li><a href="/products?category=Running" class="text-light text-decoration-none">Running Shoes</a></li>
+                        <li><a href="/products?category=Training" class="text-light text-decoration-none">Training Shoes</a></li>
+                        <li><a href="/cart" class="text-light text-decoration-none">Shopping Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6>Contact Info</h6>
+                    <p class="mb-1"><i class="fas fa-envelope"></i> info@asicsstore.com</p>
+                    <p class="mb-1"><i class="fas fa-phone"></i> 1-800-ASICS-1</p>
+                    <div class="mt-3">
+                        <a href="#" class="text-light me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-light me-3"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p>&copy; 2024 ASICS Store. All rights reserved. Built with FastAPI.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Update cart count (you can implement this with AJAX)
+        function updateCartCount() {
+            // This would typically fetch from an API endpoint
+            // For now, we'll use localStorage or cookies
+        }
+        
+        // Size selector functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sizeOptions = document.querySelectorAll('.size-option');
+            const sizeInput = document.getElementById('selected-size');
+            
+            sizeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    sizeOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    if (sizeInput) {
+                        sizeInput.value = this.dataset.size;
+                    }
+                });
+            });
+        });
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
