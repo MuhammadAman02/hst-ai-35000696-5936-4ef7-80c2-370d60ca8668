@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="display-5 fw-bold text-primary mb-4">Shopping Cart</h1>
+    
+    {% if cart_items %}
+    <div class="row">
+        <!-- Cart Items -->
+        <div class="col-lg-8">
+            {% for item in cart_items %}
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        <img src="{{ item.product.image_url or 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=200&fit=crop&crop=center' }}" 
+                             class="img-fluid rounded-start h-100" style="object-fit: cover;" alt="{{ item.product.name }}">
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <h5 class="card-title">{{ item.product.name }}</h5>
+                                    <p class="text-muted mb-2">Size: {{ item.size }}</p>
+                                    <p class="text-muted mb-2">Quantity: {{ item.quantity }}</p>
+                                    <p class="price-tag">${{ "%.2f"|format(item.product.price) }} each</p>
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="text-primary">${{ "%.2f"|format(item.subtotal) }}</h5>
+                                    <form action="/cart/remove/{{ item.id }}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>${{ "%.2f"|format(total) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping:</span>
+                        <span>{% if total >= 75 %}FREE{% else %}$9.99{% endif %}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax:</span>
+                        <span>${{ "%.2f"|format(total * 0.08) }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total:</strong>
+                        <strong class="text-primary">
+                            ${{ "%.2f"|format(total + (0 if total >= 75 else 9.99) + (total * 0.08)) }}
+                        </strong>
+                    </div>
+                    
+                    {% if total < 75 %}
+                    <div class="alert alert-info">
+                        <small>Add ${{ "%.2f"|format(75 - total) }} more for free shipping!</small>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="d-grid gap-2">
+                        <a href="/checkout" class="btn btn-primary btn-lg">
+                            <i class="fas fa-credit-card"></i> Proceed to Checkout
+                        </a>
+                        <a href="/products" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left"></i> Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shipping Info -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6 class="card-title">Shipping Information</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="fas fa-truck text-primary me-2"></i> Standard: 5-7 business days</li>
+                        <li><i class="fas fa-shipping-fast text-primary me-2"></i> Express: 2-3 business days</li>
+                        <li><i class="fas fa-undo text-primary me-2"></i> Free returns within 30 days</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- Empty Cart -->
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">Your cart is empty</h4>
+        <p class="text-muted">Add some ASICS shoes to get started!</p>
+        <a href="/products" class="btn btn-primary btn-lg">
+            <i class="fas fa-shopping-bag"></i> Start Shopping
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
