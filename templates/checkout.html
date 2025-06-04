@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="display-5 fw-bold text-primary mb-4">Checkout</h1>
+    
+    <div class="row">
+        <!-- Checkout Form -->
+        <div class="col-lg-8">
+            <form action="/checkout/complete" method="post">
+                <!-- Shipping Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Shipping Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Street Address *</label>
+                            <input type="text" class="form-control" id="address" name="address" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City *</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="postal_code" class="form-label">Postal Code *</label>
+                                <input type="text" class="form-control" id="postal_code" name="postal_code" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Information -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Payment Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> 
+                            This is a demo store. No actual payment will be processed.
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="card_number" class="form-label">Card Number</label>
+                            <input type="text" class="form-control" id="card_number" placeholder="1234 5678 9012 3456" readonly>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expiry" class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control" id="expiry" placeholder="MM/YY" readonly>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" placeholder="123" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Place Order Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-credit-card"></i> Place Order
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Cart Items -->
+                    {% for item in cart_items %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h6 class="mb-0">{{ item.product.name }}</h6>
+                            <small class="text-muted">Size: {{ item.size }}, Qty: {{ item.quantity }}</small>
+                        </div>
+                        <span>${{ "%.2f"|format(item.subtotal) }}</span>
+                    </div>
+                    {% endfor %}
+                    
+                    <hr>
+                    
+                    <!-- Totals -->
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>${{ "%.2f"|format(total) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping:</span>
+                        <span>{% if total >= 75 %}FREE{% else %}$9.99{% endif %}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Tax:</span>
+                        <span>${{ "%.2f"|format(total * 0.08) }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total:</strong>
+                        <strong class="text-primary">
+                            ${{ "%.2f"|format(total + (0 if total >= 75 else 9.99) + (total * 0.08)) }}
+                        </strong>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Info -->
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h6 class="card-title">Secure Checkout</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><i class="fas fa-lock text-success me-2"></i> SSL encrypted</li>
+                        <li><i class="fas fa-shield-alt text-success me-2"></i> Secure payment processing</li>
+                        <li><i class="fas fa-user-shield text-success me-2"></i> Privacy protected</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
