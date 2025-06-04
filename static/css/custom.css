@@ -1,0 +1,53 @@
+/* Custom styles for ASICS Store */
+
+/* Additional responsive improvements */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .product-image {
+        height: 200px;
+    }
+    
+    .size-selector-container {
+        text-align: center;
+    }
+    
+    .btn-group {
+        flex-wrap: wrap;
+    }
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Smooth transitions */
+.card, .btn, .badge {
+    transition: all 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--asics-blue);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0052a3;
+}
