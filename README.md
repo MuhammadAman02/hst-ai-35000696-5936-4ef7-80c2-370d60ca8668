@@ -1,136 +1,215 @@
-# Minimal FastAPI Project Base
+# ASICS E-commerce Store
 
-A streamlined foundation for building Python web applications using FastAPI.
+A professional e-commerce platform for selling ASICS athletic footwear, built with FastAPI and modern web technologies.
 
 ## Features
 
-- **FastAPI Core**: Leverages the high-performance FastAPI framework.
-- **Docker Support**: Production-ready containerization with a multi-stage Dockerfile.
-- **Fly.io Optimized**: Includes a `fly.toml` for easy deployment with auto-scaling and cost-saving measures.
-- **Health Monitoring**: Basic health check endpoint (`/health`) included.
-- **Environment Configuration**: Uses `.env` files for managing settings.
+### 🛍️ Customer Features
+- **Product Catalog**: Browse ASICS shoes by category (Running, Training, Lifestyle, Tennis)
+- **Product Search**: Find shoes by name, description, or category
+- **Product Details**: Detailed product pages with size selection and high-quality images
+- **Shopping Cart**: Add products to cart with size and quantity selection
+- **Checkout Process**: Complete order placement with shipping information
+- **Responsive Design**: Mobile-first design that works on all devices
 
-## Project Structure
+### 👨‍💼 Admin Features
+- **Product Management**: Add, view, and manage product inventory
+- **Image Upload**: Upload and process product images automatically
+- **Inventory Tracking**: Monitor stock levels and featured products
+- **Dashboard**: Overview of products, stock status, and key metrics
 
-```
-project_base/
-├── app/
-│   ├── __init__.py
-│   ├── api/            # API endpoints (e.g., FastAPI routers)
-│   │   └── __init__.py
-│   ├── core/           # Core configuration, settings, error handling, logging
-│   │   └── __init__.py
-│   ├── frontend/       # UI implementations (e.g., NiceGUI pages, ReactPy components, FastAPI routes)
-│   │   ├── __init__.py
-│   │   # ├── nicegui_app.py  # Example: NiceGUI implementation
-│   │   # ├── reactpy_app.py  # Example: ReactPy implementation
-│   │   # └── routes.py       # Example: FastAPI frontend routes
-│   ├── generated/      # AI-generated application code
-│   │   └── __init__.py
-│   ├── models/         # Data models & schemas (e.g., Pydantic, SQLAlchemy)
-│   │   └── __init__.py
-│   ├── services/       # Business logic & external API integrations
-│   │   └── __init__.py
-│   ├── static/         # Static assets (CSS, JS, images). ALL image files MUST be placed here or in subdirectories within static/. Do NOT create separate top-level image directories like 'pictures/'.
-│   ├── templates/      # HTML templates (Jinja2)
-│   └── main.py         # Defines FastAPI routes and application logic for the 'app' module
-├── .dockerignore         # Specifies intentionally untracked files for Docker
-├── .env                  # Environment variables (create this file based on .env.example if provided)
-├── Dockerfile            # Container configuration
-├── fly.toml              # fly.io deployment configuration
-├── main.py               # Application entry point (runs the Uvicorn server)
-├── README.md             # This file
-└── requirements.txt      # Python dependencies
-```
+### 🔧 Technical Features
+- **FastAPI Backend**: High-performance async API with automatic documentation
+- **SQLAlchemy ORM**: Robust database management with relationships
+- **Jinja2 Templates**: Server-side rendering for SEO and performance
+- **Image Processing**: Automatic image optimization and thumbnail generation
+- **Session Management**: Persistent shopping cart across browser sessions
+- **Security**: Input validation, CORS protection, and secure headers
 
-## Getting Started
+## Quick Start
 
 ### Prerequisites
-
-- Python 3.8+
-- Docker (optional, for containerized deployment)
-- Fly.io account and `flyctl` CLI (optional, for Fly.io deployment)
+- Python 3.10+
+- pip
 
 ### Installation
 
-1.  **Clone the repository (if applicable)**
-2.  **Create and activate a virtual environment:**
-    ```bash
-    python -m venv venv
-    # On Windows
-    # venv\Scripts\activate
-    # On macOS/Linux
-    # source venv/bin/activate
-    ```
-3.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  **Create a `.env` file** in the `project_base` directory (you can copy `.env.example` if one exists and modify it). At a minimum, it might look like this if you want to change the default port:
-    ```env
-    PORT=8000
-    HOST=0.0.0.0
-    ```
-    If no `.env` file is present, the application will use default values (e.g., port 8000).
+1. **Clone and setup**:
+```bash
+git clone <repository-url>
+cd asics-store
+pip install -r requirements.txt
+```
 
-### Running the Application Locally
+2. **Configure environment**:
+```bash
+cp .env.example .env
+# Edit .env with your settings
+```
 
-Execute the main application script:
-
+3. **Run the application**:
 ```bash
 python main.py
 ```
 
-The application will typically be available at `http://0.0.0.0:8000` (or the port specified in your `.env` file).
+4. **Access the store**:
+- **Store**: http://localhost:8000
+- **Admin**: http://localhost:8000/admin (admin/admin123)
+- **API Docs**: http://localhost:8000/docs
+
+## Project Structure
+
+```
+asics-store/
+├── main.py                 # Application entry point
+├── requirements.txt        # Python dependencies
+├── dockerfile             # Container configuration
+├── fly.toml               # Deployment configuration
+├── .env                   # Environment variables
+├── app/
+│   ├── main.py            # FastAPI application and routes
+│   └── config.py          # Application configuration
+├── core/
+│   └── database.py        # Database connection and session management
+├── models/
+│   └── schemas.py         # SQLAlchemy and Pydantic models
+├── services/
+│   └── business.py        # Business logic and data services
+├── templates/             # Jinja2 HTML templates
+│   ├── base.html          # Base template with navigation
+│   ├── home.html          # Homepage with featured products
+│   ├── products.html      # Product catalog and search
+│   ├── product_detail.html # Individual product pages
+│   ├── cart.html          # Shopping cart
+│   ├── checkout.html      # Checkout process
+│   ├── order_success.html # Order confirmation
+│   └── admin/             # Admin interface templates
+└── static/                # Static assets (CSS, JS, images)
+```
+
+## Database Schema
+
+### Products
+- Product information (name, description, price, category)
+- Inventory management (stock, sizes)
+- Image URLs and featured status
+
+### Cart Items
+- Session-based shopping cart
+- Product associations with size and quantity
+
+### Orders
+- Customer information and shipping details
+- Order items with pricing snapshot
 
 ## API Endpoints
 
--   `GET /`: Returns a welcome message.
--   `GET /health`: Returns a health status, useful for monitoring.
+### Public Routes
+- `GET /` - Homepage with featured products
+- `GET /products` - Product catalog with filtering and search
+- `GET /product/{id}` - Product detail page
+- `POST /cart/add/{product_id}` - Add product to cart
+- `GET /cart` - View shopping cart
+- `GET /checkout` - Checkout page
+- `POST /checkout/complete` - Process order
+
+### Admin Routes (Authentication Required)
+- `GET /admin` - Admin dashboard
+- `GET /admin/products/add` - Add product form
+- `POST /admin/products/add` - Create new product
+
+### Utility Routes
+- `GET /health` - Health check endpoint
+
+## Configuration
+
+### Environment Variables
+```bash
+DATABASE_URL=sqlite:///./asics_store.db
+SECRET_KEY=your-secret-key-change-in-production
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+DEBUG=True
+UPLOAD_DIR=static/images/products
+```
+
+### Database Configuration
+- SQLite for development (included)
+- PostgreSQL support for production
+- Automatic table creation on startup
 
 ## Deployment
 
 ### Docker Deployment
-
-1.  **Build the Docker image:**
-    ```bash
-    docker build -t my-fastapi-app .
-    ```
-2.  **Run the Docker container:**
-    ```bash
-    docker run -p 8000:8000 -d my-fastapi-app
-    ```
-    Replace `8000:8000` with `<host_port>:<container_port>` if you need to map to a different host port. The container port is determined by the `PORT` environment variable set in the `Dockerfile` or `fly.toml` (defaulting to 8000).
+```bash
+docker build -t asics-store .
+docker run -p 8000:8000 asics-store
+```
 
 ### Fly.io Deployment
+```bash
+fly deploy
+```
 
-1.  **Install `flyctl`**: Follow the instructions at [fly.io/docs/hands-on/install-flyctl/](https://fly.io/docs/hands-on/install-flyctl/).
-2.  **Login to Fly.io**: `fly auth login`
-3.  **Launch the app (first time only)**:
-    ```bash
-    fly launch --name your-unique-app-name --region sin
-    ```
-    (Replace `your-unique-app-name` and `sin` (Singapore) with your desired app name and region. This will also create a `fly.toml` if one doesn't exist, or update the existing one.)
-4.  **Deploy changes**:
-    ```bash
-    fly deploy
-    ```
+### Production Considerations
+- Change default admin credentials
+- Use PostgreSQL for production database
+- Configure proper secret key
+- Set up SSL/TLS certificates
+- Configure CDN for static assets
 
-The `fly.toml` file is pre-configured for auto-scaling and to stop machines when idle to save costs.
+## Sample Data
 
-## Customization
+The application includes sample ASICS products across categories:
+- **Running**: Gel-Kayano, Gel-Nimbus series
+- **Training**: Gel-Quantum, Cross-training shoes
+- **Lifestyle**: Tiger series, casual sneakers
+- **Tennis**: Court-specific performance shoes
 
--   **Add new API endpoints**: Modify `project_base/app/main.py` to include new routes and logic.
--   **Modify dependencies**: Update `project_base/requirements.txt` and reinstall.
--   **Adjust Docker configuration**: Edit `project_base/Dockerfile`.
--   **Change deployment settings**: Update `project_base/fly.toml` for Fly.io.
+## Security Features
 
-## Core Principles for Development
+- **Input Validation**: Pydantic models validate all input data
+- **SQL Injection Prevention**: SQLAlchemy ORM with parameterized queries
+- **XSS Protection**: Jinja2 template auto-escaping
+- **CORS Configuration**: Proper cross-origin request handling
+- **Session Security**: Secure cookie configuration
+- **File Upload Security**: Image validation and processing
 
-While this base is minimal, consider these principles as you expand your application:
+## Performance Optimizations
 
--   **Modularity**: Keep code organized into logical modules.
--   **Clarity**: Write clear, understandable code with type hints where appropriate.
--   **Testing**: Implement unit and integration tests for new features.
--   **Security**: Follow security best practices (input validation, authentication if needed, etc.).
--   **Documentation**: Keep this README and code comments up-to-date.
+- **Async Operations**: FastAPI async support for database operations
+- **Image Optimization**: Automatic image resizing and compression
+- **Database Indexing**: Optimized queries for product search
+- **Static Asset Caching**: Efficient static file serving
+- **Lazy Loading**: Efficient data loading patterns
+
+## Browser Support
+
+- Chrome 90+
+- Firefox 88+
+- Safari 14+
+- Edge 90+
+- Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Support
+
+For support and questions:
+- Check the API documentation at `/docs`
+- Review the health check endpoint at `/health`
+- Examine application logs for debugging
+
+---
+
+**Built with FastAPI, SQLAlchemy, and modern web technologies for a professional e-commerce experience.**
